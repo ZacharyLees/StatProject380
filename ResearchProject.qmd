@@ -1,11 +1,12 @@
 ---
-title: "Evaluating Racial Bias Relating to Violent Crimes in U.S. Communities using a Predictive Machine Learning Model"
+title: "Eliminating Racial Bias Relating to Violent Crimes in U.S. Communities using a Predictive Machine Learning Model"
 author: "input our names here"
 format: pdf
 editor: visual
 ---
 
-<<<<<<< HEAD
+# Reading Libraries and Dataset
+
 ```{r}
 #loads packages
 packages <- c(
@@ -20,47 +21,76 @@ packages <- c(
     "repr",
     # NEW
     "torch",
-    "mlbench"
+    "mlbench",
+    "Stat2Data",
+    "ggformula",
+    "mosaic"
 )
 
 # renv::install(packages)
 sapply(packages, require, character.only=TRUE)
-```
-
-```{r}
-#reads the data in, doesn't work rn probably due to the header currently being changed
-Data <- read.csv("https://raw.githubusercontent.com/snehaprem03/StatProject/main/communities.data", header = T, na.rm = T)
-
-#eliminates country and community which we said was not useful since they had lots of ?
-Data <- Data %>%
-  dplyr::select(-Country, -Community)
-```
-
-```{r}
-data_model <- lm(X8 ~ ., data = Data)
-```
-
-```{r}
-plot(data_model)
-```
-
-```{r}
-plotModel(data_model)
-```
-
-```{r}
-
-```
-=======
-# Reading Libraries and Dataset
-
-```{r}
-library(tidyverse)
-
 
 Data <- read.csv("https://raw.githubusercontent.com/snehaprem03/StatProject/main/communities.data")
+```
+
+\-
+
+# Data Tidying and Manipulation
 
 
+```{r}
+#eliminates country and community which we said was not useful since they had lots of ?
+df <- Data %>%
+  dplyr::select(-country, -community)
+```
+
+```{r}
+df %>% 
+keep(is.numeric) %>% 
+gather() %>% 
+ggplot(aes(y=value)) +
+geom_boxplot() +
+facet_wrap(~ key,scales="free")
+```
+
+\-
+
+# Variable Creation, Selection, and Manipulation
+
+```{r}
 
 ```
->>>>>>> ea810f9c5705fa6f26d886febb9e7a20a1ff4208
+
+\-
+
+# Introductory Plots
+
+```{r}
+gf_point(ViolentCrimesPerPop ~ medIncome, data = df)
+```
+
+```{r}
+gf_point(ViolentCrimesPerPop ~ PctTeen2Par, data = df)
+```
+
+
+```{r}
+df %>%
+  group_by(state) %>%
+gf_point(state ~ medIncome, data = df)
+```
+
+
+\-
+
+# Exploratory Data Analysis
+
+```{r}
+model <- lm(ViolentCrimesPerPop ~ ., data = df)
+summary(model)
+plot(model)
+plotModel(model)
+```
+
+\-
+
