@@ -24,7 +24,8 @@ packages <- c(
     "mlbench",
     "Stat2Data",
     "ggformula",
-    "mosaic"
+    "mosaic",
+    "car"
 )
 
 # renv::install(packages)
@@ -34,6 +35,11 @@ Data <- read.csv("https://raw.githubusercontent.com/snehaprem03/StatProject/main
 ```
 
 \-
+
+##Why is this problem important?
+This problem is important because we want to build a predictive model for the number of violent crimes within U.S. communities. There are many different policy decisions made based on various attributes like race, gender, police force per area, income per area in a community and with the number of violent crimes in the U.S. increasing we wanted to see which of these attributes contribute the most to a high-crime U.S community. 
+Most models often conclude that black communities have higher violent crime rates, however we want to eliminate this racial bias in our model and see if it is actually race that affects violent crimes or if it is more nuanced features such as a large police force, high unemployment, etc. This can be very important for policy decisions
+
 
 # Data Tidying and Manipulation
 
@@ -80,6 +86,13 @@ df %>%
 gf_point(state ~ medIncome, data = df)
 ```
 
+```{r}
+R <- df %>% 
+    keep(is.numeric) %>% 
+    cor()
+R
+```
+
 
 \-
 
@@ -92,5 +105,14 @@ plot(model)
 plotModel(model)
 ```
 
+
+```{r}
+vif(model) %>% knitr::kable()
+```
+
+
 \-
+
+##What are your expected outcomes for the project?
+Initially, we would want to be able to find the predictors from our dataset that impact the likelihood of violent crimes occurring, which will allow us to have a better understanding of the data, which will give us a stronger model when making predictions regarding violent crimes occurring. Other factors that may influence this can be variables such as race, gender, police force per area, income, etc. From all this, we would have a classification model built on feature selection and encoding algorithms (the number of violent crimes that occur).
 
